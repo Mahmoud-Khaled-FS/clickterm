@@ -33,5 +33,6 @@ func keyCmd() *cobra.Command {
 	}
 	setKeyCmd.Flags().StringVarP(&key.Key, "set", "s", "", "Set Api token")
 	setKeyCmd.Flags().BoolVarP(&key.ShouldClear, "clear", "c", false, "Remove api key")
+	setKeyCmd.Flags().BoolVar(&key.ShouldVerify, "verify", false, "Verify api token")
 	return setKeyCmd
 }

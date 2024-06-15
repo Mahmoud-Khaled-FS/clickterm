@@ -18,9 +18,9 @@ func New(token string) ClickUpAPI {
 	}
 }
 
-func (c ClickUpAPI) sendRequest(path string, placeholder any) {
-	req, err := http.NewRequest("GET", c.url + path, nil)
-	
+func (c ClickUpAPI) sendRequest(path string) *http.Response {
+	req, err := http.NewRequest("GET", c.url+path, nil)
+
 	if err != nil {
 		panic(err)
 	}
@@ -28,18 +28,22 @@ func (c ClickUpAPI) sendRequest(path string, placeholder any) {
 	req.Header.Add("Authorization", c.Token)
 
 	res, err := http.DefaultClient.Do(req)
-	
+
 	if err != nil {
 		panic(err)
 	}
+	return res
+}
+
+func (c *ClickUpAPI) getRequestBody(res *http.Response, placeholder any) {
 	defer res.Body.Close()
 
-	  body, err := io.ReadAll(res.Body)
-  if err != nil {
-    panic(err)
-  }
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		panic(err)
+	}
 
-	if err = json.Unmarshal(body	, placeholder); err != nil {
+	if err = json.Unmarshal(body, placeholder); err != nil {
 		panic("ERROR: can not decode json response")
 	}
 }
